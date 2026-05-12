@@ -1,0 +1,33 @@
+
+# Composer
+vendor/
+composer.lock
+composer.json.lock
+
+# PHPUnit
+pest.xml
+/tests/TestCase.php
+
+# Coverage
+coverage/
+/coverage/index.html
+
+# Config cache
+bootstrap/cache/config.php
+
+# Logs
+storage/logs/*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
