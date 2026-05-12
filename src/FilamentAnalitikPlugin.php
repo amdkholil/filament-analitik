@@ -46,6 +46,7 @@ class FilamentAnalitikPlugin implements Plugin
                 \Kholil\FilamentAnalitik\Widgets\PageViewsChart::class,
                 \Kholil\FilamentAnalitik\Widgets\VisitorsCountryChart::class,
                 \Kholil\FilamentAnalitik\Widgets\TopPagesTable::class,
+                \Kholil\FilamentAnalitik\Widgets\TopCountriesTable::class,
             ]);
     }
 

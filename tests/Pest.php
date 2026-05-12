@@ -6,6 +6,8 @@ use Illuminate\Support\MessageBag;
 
 uses(TestCase::class)
     ->beforeEach(function () {
-        view()->share('errors', (new ViewErrorBag)->put('default', new MessageBag));
+        $errors = new ViewErrorBag;
+        $errors->put('default', new MessageBag);
+        view()->share('errors', $errors);
     })
     ->in(__DIR__);

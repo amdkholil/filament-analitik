@@ -89,5 +89,5 @@ The system uses a single table (default: `filament_page_views`) with the followi
 ---
 
 ## 5. Appendices
-- **Repository**: [kholil/filament-analitik](https://github.com/kholil/filament-analitik)
+- **Repository**: [kholil/filament-analitik](https://github.com/amdkholil/filament-analitik)
 - **License**: MIT

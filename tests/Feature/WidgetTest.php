@@ -32,3 +32,30 @@ it('can render page views chart widget', function () {
     Livewire::test(PageViewsChart::class)
         ->assertSee('Page Views');
 });
+
+it('can render top pages table widget', function () {
+    PageView::create([
+        'url' => 'http://localhost/test',
+        'path' => 'test',
+        'method' => 'GET',
+        'ip' => '127.0.0.1',
+    ]);
+
+    Livewire::test(TopPagesTable::class)
+        ->assertSee('Top 10 Visited Pages')
+        ->assertSee('test');
+});
+
+it('can render top countries table widget', function () {
+    PageView::create([
+        'url' => 'http://localhost/test',
+        'path' => 'test',
+        'method' => 'GET',
+        'ip' => '127.0.0.1',
+        'country' => 'Indonesia',
+    ]);
+
+    Livewire::test(TopCountriesTable::class)
+        ->assertSee('Top Countries by Visits')
+        ->assertSee('Indonesia');
+});
