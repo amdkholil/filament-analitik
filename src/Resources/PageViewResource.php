@@ -11,14 +11,26 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Kholil\FilamentAnalitik\Models\PageView;
 use Kholil\FilamentAnalitik\Resources\PageViewResource\Pages;
+use Kholil\FilamentAnalitik\FilamentAnalitikPlugin;
 
 class PageViewResource extends Resource
 {
     protected static ?string $model = PageView::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
+    public static function getNavigationLabel(): string
+    {
+        return FilamentAnalitikPlugin::get()->getNavigationLabel() . ' Logs';
+    }
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Analytics';
+    public static function getNavigationIcon(): ?string
+    {
+        return FilamentAnalitikPlugin::get()->getNavigationIcon();
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return FilamentAnalitikPlugin::get()->getNavigationGroup();
+    }
 
     public static function form(Schema $schema): Schema
     {

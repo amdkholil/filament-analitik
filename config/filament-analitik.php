@@ -30,4 +30,20 @@ return [
     |
     */
     'project_id' => env('FILAMENT_ANALITIK_PROJECT_ID', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Sidebar Navigation Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Define the custom navigation label, group, and icon in the Filament sidebar.
+    |
+    | Group defaults to null (no group).
+    |
+    */
+    'navigation' => [
+        'label' => 'Analitik',
+        'group' => null,
+        'icon' => 'heroicon-o-chart-bar',
+    ],
 ];

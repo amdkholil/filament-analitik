@@ -7,9 +7,9 @@ use Filament\Panel;
 
 class FilamentAnalitikPlugin implements Plugin
 {
-    protected string $navigationLabel = 'Analitik';
-    protected string $navigationIcon = 'heroicon-o-chart-bar';
-    protected string $navigationGroup = 'System';
+    protected ?string $navigationLabel = null;
+    protected ?string $navigationIcon = null;
+    protected ?string $navigationGroup = null;
     protected ?string $projectId = null;
 
     public function projectId(?string $id): static
@@ -50,19 +50,19 @@ class FilamentAnalitikPlugin implements Plugin
             ]);
     }
 
-    public function navigationLabel(string $label): static
+    public function navigationLabel(?string $label): static
     {
         $this->navigationLabel = $label;
         return $this;
     }
 
-    public function navigationIcon(string $icon): static
+    public function navigationIcon(?string $icon): static
     {
         $this->navigationIcon = $icon;
         return $this;
     }
 
-    public function navigationGroup(string $group): static
+    public function navigationGroup(?string $group): static
     {
         $this->navigationGroup = $group;
         return $this;
@@ -70,17 +70,17 @@ class FilamentAnalitikPlugin implements Plugin
 
     public function getNavigationLabel(): string
     {
-        return $this->navigationLabel;
+        return $this->navigationLabel ?? config('filament-analitik.navigation.label', 'Analitik');
     }
 
     public function getNavigationIcon(): string
     {
-        return $this->navigationIcon;
+        return $this->navigationIcon ?? config('filament-analitik.navigation.icon', 'heroicon-o-chart-bar');
     }
 
-    public function getNavigationGroup(): string
+    public function getNavigationGroup(): ?string
     {
-        return $this->navigationGroup;
+        return $this->navigationGroup ?? config('filament-analitik.navigation.group', null);
     }
 
     public function boot(Panel $panel): void
