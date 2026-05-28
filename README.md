@@ -136,8 +136,8 @@ Detailed technical documentation and requirements can be found in the [doc](doc)
 ## Requirements
 
 - PHP 8.2+
-- Filament v5.0+
-- Laravel 12.0+
+- Filament v4.0+ / v5.0+
+- Laravel 11.0+ / 12.0+
 
 ## License
 
