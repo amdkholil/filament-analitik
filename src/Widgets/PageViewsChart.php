@@ -30,7 +30,9 @@ class PageViewsChart extends ChartWidget
     protected function getData(): array
     {
         $activeFilter = $this->filter;
-        $isSqlite = DB::getDriverName() === 'sqlite';
+        $driver = DB::getDriverName();
+        $isSqlite = $driver === 'sqlite';
+        $isPostgres = $driver === 'pgsql';
         
         // Generate potential labels to fill gaps
         $labels = [];
@@ -44,9 +46,23 @@ class PageViewsChart extends ChartWidget
             }
         }
 
-        $format = $activeFilter === '1' 
-            ? ($isSqlite ? "strftime('%H:00', created_at)" : "DATE_FORMAT(created_at, '%H:00')")
-            : ($isSqlite ? "date(created_at)" : "DATE(created_at)");
+        if ($activeFilter === '1') {
+            if ($isSqlite) {
+                $format = "strftime('%H:00', created_at)";
+            } elseif ($isPostgres) {
+                $format = "to_char(created_at, 'HH24:00')";
+            } else {
+                $format = "DATE_FORMAT(created_at, '%H:00')";
+            }
+        } else {
+            if ($isSqlite) {
+                $format = "date(created_at)";
+            } elseif ($isPostgres) {
+                $format = "created_at::date";
+            } else {
+                $format = "DATE(created_at)";
+            }
+        }
 
         $query = PageView::select(
             DB::raw("{$format} as label"),

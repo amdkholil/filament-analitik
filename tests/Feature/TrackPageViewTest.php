@@ -75,3 +75,65 @@ it('does not track filament panel pages', function () {
 
     Bus::assertNotDispatched(TrackPageViewJob::class);
 });
+
+it('can execute track page view job and resolve location', function () {
+    $position = new \Stevebauman\Location\Position();
+    $position->cityName = 'Jakarta';
+    $position->regionName = 'DKI Jakarta';
+    $position->countryName = 'Indonesia';
+
+    \Stevebauman\Location\Facades\Location::shouldReceive('get')
+        ->once()
+        ->with('8.8.8.8')
+        ->andReturn($position);
+
+    $job = new TrackPageViewJob([
+        'url' => 'http://localhost/test',
+        'path' => 'test',
+        'method' => 'GET',
+        'ip' => '8.8.8.8',
+        'user_agent' => 'Mozilla/5.0',
+        'project_id' => 'project-123',
+    ]);
+
+    $job->handle();
+
+    $this->assertDatabaseHas('filament_page_views', [
+        'url' => 'http://localhost/test',
+        'path' => 'test',
+        'method' => 'GET',
+        'ip' => '8.8.8.8',
+        'user_agent' => 'Mozilla/5.0',
+        'city' => 'Jakarta',
+        'state' => 'DKI Jakarta',
+        'country' => 'Indonesia',
+        'project_id' => 'project-123',
+    ]);
+});
+
+it('handles unresolvable location gracefully', function () {
+    \Stevebauman\Location\Facades\Location::shouldReceive('get')
+        ->once()
+        ->with('8.8.8.8')
+        ->andReturn(false);
+
+    $job = new TrackPageViewJob([
+        'url' => 'http://localhost/test',
+        'path' => 'test',
+        'method' => 'GET',
+        'ip' => '8.8.8.8',
+        'user_agent' => 'Mozilla/5.0',
+        'project_id' => null,
+    ]);
+
+    $job->handle();
+
+    $this->assertDatabaseHas('filament_page_views', [
+        'url' => 'http://localhost/test',
+        'ip' => '8.8.8.8',
+        'city' => null,
+        'state' => null,
+        'country' => null,
+    ]);
+});
+

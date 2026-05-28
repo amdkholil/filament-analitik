@@ -29,7 +29,14 @@ class TrackPageViewJob implements ShouldQueue
         }
         
         if (!empty($ip)) {
-            $location = Location::get($ip);
+            try {
+                $location = Location::get($ip);
+                if ($location === false) {
+                    $location = null;
+                }
+            } catch (\Exception $e) {
+                $location = null;
+            }
         }
 
         PageView::create([

@@ -31,3 +31,6 @@ storage/logs/*.log
 # OS files
 .DS_Store
 Thumbs.db
+
+# Test compiled files
+/tests/compiled/
