@@ -19,14 +19,18 @@ return [
     | The table name used to store page views.
     |
     */
-    'table_name' => 'filament_page_views',
+    'table_name' => 'analitik',
     
     /*
     |--------------------------------------------------------------------------
     | Project ID
     |--------------------------------------------------------------------------
     |
-    | A unique identifier for this project.
+    | A unique identifier for this project. Useful for multi-tenant, SaaS,
+    | or centralized analytics setups where you collect analytics from 
+    | multiple applications/websites into a single database.
+    |
+    | Default: null (no project ID recorded)
     |
     */
     'project_id' => env('FILAMENT_ANALITIK_PROJECT_ID', null),

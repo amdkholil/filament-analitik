@@ -98,7 +98,7 @@ it('can execute track page view job and resolve location', function () {
 
     $job->handle();
 
-    $this->assertDatabaseHas('filament_page_views', [
+    $this->assertDatabaseHas((new PageView)->getTable(), [
         'url' => 'http://localhost/test',
         'path' => 'test',
         'method' => 'GET',
@@ -128,7 +128,7 @@ it('handles unresolvable location gracefully', function () {
 
     $job->handle();
 
-    $this->assertDatabaseHas('filament_page_views', [
+    $this->assertDatabaseHas((new PageView)->getTable(), [
         'url' => 'http://localhost/test',
         'ip' => '8.8.8.8',
         'city' => null,
