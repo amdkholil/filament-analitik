@@ -32,6 +32,11 @@ class PageViewResource extends Resource
         return FilamentAnalitikPlugin::get()->getNavigationGroup();
     }
 
+    public static function canAccess(): bool
+    {
+        return FilamentAnalitikPlugin::canAccess();
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema

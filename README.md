@@ -97,6 +97,37 @@ FilamentAnalitikPlugin::make()
     ->navigationIcon('heroicon-o-presentation-chart-line')
 ```
 
+## Authorization & Access Control
+
+You can restrict access to the analytics dashboard and logs in three different ways:
+
+### 1. Gate-Based Permissions
+Define a Laravel Gate or Permission name (e.g. using Spatie Laravel-Permission) in your `config/filament-analitik.php` file:
+
+```php
+'access' => [
+    'gate' => 'view_analytics_logs',
+],
+```
+
+### 2. Role-Based Access
+Define an array of roles that are allowed to access:
+
+```php
+'access' => [
+    'roles' => ['admin', 'super-admin'],
+],
+```
+*Note: The plugin automatically integrates with package role methods such as `$user->hasAnyRole($roles)` or `$user->hasRole($role)` and falls back to checking a direct `$user->role` property.*
+
+### 3. Custom Fluent Callback
+For custom or complex programmatic authorization logic, pass a Closure dynamically to the plugin registration in your Panel Provider:
+
+```php
+FilamentAnalitikPlugin::make()
+    ->canAccessUsing(fn () => auth()->user()->email === 'kholil@example.com')
+```
+
 ## Documentation
 
 Detailed technical documentation and requirements can be found in the [doc](doc) folder:

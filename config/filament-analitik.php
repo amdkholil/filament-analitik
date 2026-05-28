@@ -50,4 +50,21 @@ return [
         'group' => null,
         'icon' => 'heroicon-o-chart-bar',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Access Control (Authorization)
+    |--------------------------------------------------------------------------
+    |
+    | Define authorization settings to restrict access to the analytics dashboard
+    | and logs.
+    |
+    | 'gate':   A Gate/Permission name that the user must possess (e.g. 'view_analytics').
+    | 'roles':  An array of role names allowed to access (e.g. ['admin', 'super-admin']).
+    |
+    */
+    'access' => [
+        'gate' => null,
+        'roles' => null,
+    ],
 ];

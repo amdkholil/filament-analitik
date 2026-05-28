@@ -34,6 +34,11 @@ class AnalyticsDashboard extends Page
         return FilamentAnalitikPlugin::get()->getNavigationLabel();
     }
 
+    public static function canAccess(): bool
+    {
+        return FilamentAnalitikPlugin::canAccess();
+    }
+
     protected function getHeaderWidgets(): array
     {
         return [

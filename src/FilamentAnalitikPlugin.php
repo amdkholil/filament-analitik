@@ -11,6 +11,54 @@ class FilamentAnalitikPlugin implements Plugin
     protected ?string $navigationIcon = null;
     protected ?string $navigationGroup = null;
     protected ?string $projectId = null;
+    protected static ?\Closure $canAccessCallback = null;
+
+    public function canAccessUsing(?\Closure $callback): static
+    {
+        static::$canAccessCallback = $callback;
+        return $this;
+    }
+
+    public static function canAccess(): bool
+    {
+        if (static::$canAccessCallback) {
+            return app()->call(static::$canAccessCallback);
+        }
+
+        $user = auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        // 1. Check custom gate/permission if configured
+        $gate = config('filament-analitik.access.gate');
+        if ($gate && ! $user->can($gate)) {
+            return false;
+        }
+
+        // 2. Check roles if configured
+        $roles = config('filament-analitik.access.roles');
+        if ($roles) {
+            $roles = (array) $roles;
+            
+            if (method_exists($user, 'hasAnyRole')) {
+                if (! $user->hasAnyRole($roles)) {
+                    return false;
+                }
+            } elseif (method_exists($user, 'hasRole')) {
+                if (! collect($roles)->contains(fn ($role) => $user->hasRole($role))) {
+                    return false;
+                }
+            } else {
+                if (! isset($user->role) || ! in_array($user->role, $roles)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 
     public function projectId(?string $id): static
     {
