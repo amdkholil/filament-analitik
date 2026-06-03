@@ -23,7 +23,7 @@ You can install the package via composer:
 composer require kholil/filament-analitik
 ```
 
-You can publish and run the migrations with:
+You **must** publish and run the migrations (autoloading from vendor is not supported):
 
 ```bash
 php artisan vendor:publish --tag="filament-analitik-migrations"

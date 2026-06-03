@@ -16,6 +16,7 @@ Simple page analytics for Filament v4/v5 (compatible with Laravel 12+).
 - **Documentation**: See [doc/SRS.md](doc/SRS.md) for full requirements and architecture.
 - **Tracking Logic**: Uses `TrackPageView` middleware to dispatch `TrackPageViewJob`.
 - **Database**: Stores data in `filament_page_views` table.
+- **Migrations**: Must be published manually via `vendor:publish --tag="filament-analitik-migrations"` — no automatic loading from vendor.
 - **Location**: Uses `stevebauman/location` for geo-IP lookup.
 
 ## Coding Standards

@@ -74,7 +74,13 @@ class PageViewResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('project_id')
-                    ->options(fn () => PageView::query()->distinct()->pluck('project_id', 'project_id')->toArray())
+                    ->options(fn(): array => PageView::query()
+                        ->whereNotNull('project_id')
+                        ->where('project_id', '!=', '')
+                        ->distinct()
+                        ->pluck('project_id', 'project_id')
+                        ->filter()
+                        ->toArray())
                     ->label('Project'),
             ])
             ->actions([

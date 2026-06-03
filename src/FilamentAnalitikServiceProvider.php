@@ -18,7 +18,6 @@ class FilamentAnalitikServiceProvider extends ServiceProvider
             ], 'filament-analitik-migrations');
         }
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'filament-analitik');
     }
 

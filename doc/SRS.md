@@ -70,6 +70,14 @@ The system will track visitor activities on specified web routes, store the data
 - **Widgets**: `AnalitikStatsOverview`, `PageViewsChart`, `VisitorsCountryChart`, `TopPagesTable`.
 - **Resource**: `PageViewResource`.
 
+### 4.3 Migration Requirement
+- Migrations are **not** loaded automatically from the vendor directory.
+- Users **must** publish migrations manually using:
+  ```bash
+  php artisan vendor:publish --tag="filament-analitik-migrations"
+  php artisan migrate
+  ```
+
 ### 4.2 Data Schema
 The system uses a single table (default: `filament_page_views`) with the following structure:
 
