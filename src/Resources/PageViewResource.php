@@ -65,6 +65,7 @@ class PageViewResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('project_id')
+                    ->getStateUsing(fn($record): ?string => data_get($record, 'project_id'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -79,7 +80,8 @@ class PageViewResource extends Resource
                         ->where('project_id', '!=', '')
                         ->distinct()
                         ->pluck('project_id', 'project_id')
-                        ->filter()
+                        ->filter(fn($value) => filled($value))
+                        ->values()
                         ->toArray())
                     ->label('Project'),
             ])
