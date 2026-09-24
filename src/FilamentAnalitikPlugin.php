@@ -127,14 +127,47 @@ class FilamentAnalitikPlugin implements Plugin
         return $this->navigationLabel ?? config('filament-analitik.navigation.label', 'Analitik');
     }
 
-    public function getNavigationIcon(): string
+    public function getNavigationIcon(): ?string
     {
+        // Filament forbids icons on both a navigation group and its items.
+        // When the configured group already defines an icon, suppress the item icon.
+        if ($this->navigationGroupHasIcon()) {
+            return null;
+        }
+
         return $this->navigationIcon ?? config('filament-analitik.navigation.icon', 'heroicon-o-chart-bar');
     }
 
     public function getNavigationGroup(): ?string
     {
         return $this->navigationGroup ?? config('filament-analitik.navigation.group', null);
+    }
+
+    protected function navigationGroupHasIcon(): bool
+    {
+        $groupLabel = $this->getNavigationGroup();
+
+        if (blank($groupLabel)) {
+            return false;
+        }
+
+        try {
+            $panel = filament()->getCurrentPanel() ?? filament()->getDefaultPanel();
+        } catch (\Throwable) {
+            return false;
+        }
+
+        foreach ($panel->getNavigationGroups() as $group) {
+            if (
+                $group instanceof \Filament\Navigation\NavigationGroup
+                && $group->getLabel() === $groupLabel
+                && filled($group->getIcon())
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function boot(Panel $panel): void

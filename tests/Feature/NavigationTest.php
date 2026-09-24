@@ -1,5 +1,6 @@
 <?php
 
+use Filament\Navigation\NavigationGroup;
 use Kholil\FilamentAnalitik\FilamentAnalitikPlugin;
 use Kholil\FilamentAnalitik\Resources\PageViewResource;
 
@@ -36,4 +37,24 @@ it('can customize navigation fluently via plugin methods', function () {
     expect($plugin->getNavigationLabel())->toBe('Fluent Label');
     expect($plugin->getNavigationGroup())->toBe('Fluent Group');
     expect($plugin->getNavigationIcon())->toBe('heroicon-o-academic-cap');
+});
+
+it('suppresses the item icon when its navigation group defines an icon', function () {
+    config()->set('filament-analitik.navigation.group', 'Analytics');
+
+    filament()->getDefaultPanel()->navigationGroups([
+        NavigationGroup::make('Analytics')->icon('heroicon-o-building-office'),
+    ]);
+
+    expect(FilamentAnalitikPlugin::make()->getNavigationIcon())->toBeNull();
+});
+
+it('keeps the item icon when its navigation group has no icon', function () {
+    config()->set('filament-analitik.navigation.group', 'Analytics');
+
+    filament()->getDefaultPanel()->navigationGroups([
+        NavigationGroup::make('Analytics'),
+    ]);
+
+    expect(FilamentAnalitikPlugin::make()->getNavigationIcon())->toBe('heroicon-o-chart-bar');
 });

@@ -1,6 +1,6 @@
 {
     "name": "kholil/filament-analitik",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Simple page analytics for Filament v4/v5",
     "type": "library",
     "license": "MIT",
