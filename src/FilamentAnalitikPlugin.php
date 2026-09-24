@@ -11,18 +11,18 @@ class FilamentAnalitikPlugin implements Plugin
     protected ?string $navigationIcon = null;
     protected ?string $navigationGroup = null;
     protected ?string $projectId = null;
-    protected static ?\Closure $canAccessCallback = null;
+    protected ?\Closure $canAccessCallback = null;
 
     public function canAccessUsing(?\Closure $callback): static
     {
-        static::$canAccessCallback = $callback;
+        $this->canAccessCallback = $callback;
         return $this;
     }
 
-    public static function canAccess(): bool
+    public function checkAccess(): bool
     {
-        if (static::$canAccessCallback) {
-            return app()->call(static::$canAccessCallback);
+        if ($this->canAccessCallback !== null) {
+            return (bool) app()->call($this->canAccessCallback);
         }
 
         $user = auth()->user();
@@ -41,7 +41,7 @@ class FilamentAnalitikPlugin implements Plugin
         $roles = config('filament-analitik.access.roles');
         if ($roles) {
             $roles = (array) $roles;
-            
+
             if (method_exists($user, 'hasAnyRole')) {
                 if (! $user->hasAnyRole($roles)) {
                     return false;
@@ -58,6 +58,11 @@ class FilamentAnalitikPlugin implements Plugin
         }
 
         return true;
+    }
+
+    public static function canAccess(): bool
+    {
+        return static::get()->checkAccess();
     }
 
     public function projectId(?string $id): static
@@ -78,7 +83,8 @@ class FilamentAnalitikPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        if ($this->projectId) {
+        // Prefer instance value for this panel; keep config in sync for middleware writes.
+        if ($this->projectId !== null) {
             config(['filament-analitik.project_id' => $this->projectId]);
         }
 

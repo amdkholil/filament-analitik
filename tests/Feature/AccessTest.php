@@ -54,7 +54,7 @@ it('checks role authorization when configured', function () {
 });
 
 it('uses custom fluent access callback when provided', function () {
-    $plugin = FilamentAnalitikPlugin::make()
+    $plugin = FilamentAnalitikPlugin::get()
         ->canAccessUsing(fn () => false);
 
     $user = new TestUser();
@@ -63,5 +63,18 @@ it('uses custom fluent access callback when provided', function () {
     expect(FilamentAnalitikPlugin::canAccess())->toBeFalse();
 
     $plugin->canAccessUsing(fn () => true);
+    expect(FilamentAnalitikPlugin::canAccess())->toBeTrue();
+});
+
+it('does not leak access callback across plugin instances', function () {
+    $registered = FilamentAnalitikPlugin::get();
+    $registered->canAccessUsing(fn () => true);
+
+    $other = new FilamentAnalitikPlugin();
+    $other->canAccessUsing(fn () => false);
+
+    $user = new TestUser();
+    $this->actingAs($user);
+
     expect(FilamentAnalitikPlugin::canAccess())->toBeTrue();
 });

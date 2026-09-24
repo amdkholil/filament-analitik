@@ -57,7 +57,7 @@ The system will track visitor activities on specified web routes, store the data
 
 ### 3.3 Compatibility
 - **NFR-3.5**: The system must support PHP 8.2+.
-- **NFR-3.6**: The system must be compatible with Filament v5.0 and Laravel 12.0+.
+- **NFR-3.6**: The system must be compatible with Filament v4.0+, v5.0+, and Laravel 11.0+, 12.0+, 13.0+.
 
 ---
 
@@ -79,7 +79,7 @@ The system will track visitor activities on specified web routes, store the data
   ```
 
 ### 4.2 Data Schema
-The system uses a single table (default: `filament_page_views`) with the following structure:
+The system uses a single table (default: `analitik`, configurable via `table_name`) with the following structure:
 
 | Column | Type | Description |
 |---|---|---|
@@ -92,6 +92,7 @@ The system uses a single table (default: `filament_page_views`) with the followi
 | `city` | String | Resolved City name |
 | `state` | String | Resolved State/Region name |
 | `country` | String | Resolved Country name |
+| `project_id` | String | Optional project identifier for multi-tenant setups |
 | `created_at` | Timestamp | Time of visit |
 
 ---

@@ -51,7 +51,7 @@ it('filters out null and empty project ids in page view resource options', funct
 
     // Verify only 'project-1' and 'project-2' are present
     expect($options)->toBe([
-        'project-1' => 'project-1',
-        'project-2' => 'project-2',
+        'project-1',
+        'project-2',
     ]);
 });

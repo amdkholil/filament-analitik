@@ -6,7 +6,6 @@ composer.json.lock
 
 # PHPUnit
 pest.xml
-/tests/TestCase.php
 
 # Coverage
 coverage/

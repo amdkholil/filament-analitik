@@ -13,6 +13,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Bot Filtering
+    |--------------------------------------------------------------------------
+    |
+    | Skip tracking for known bots/crawlers and empty user agents.
+    |
+    */
+    'exclude_bots' => true,
+
+    'bot_patterns' => [
+        'bot', 'crawl', 'spider', 'slurp', 'curl', 'wget', 'python-requests',
+        'httpclient', 'facebookexternalhit', 'preview', 'monitor', 'uptime',
+        'headless', 'phantom', 'lighthouse', 'pingdom', 'gtmetrix',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Tracked Tables
     |--------------------------------------------------------------------------
     |
@@ -20,14 +36,14 @@ return [
     |
     */
     'table_name' => 'analitik',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Project ID
     |--------------------------------------------------------------------------
     |
     | A unique identifier for this project. Useful for multi-tenant, SaaS,
-    | or centralized analytics setups where you collect analytics from 
+    | or centralized analytics setups where you collect analytics from
     | multiple applications/websites into a single database.
     |
     | Default: null (no project ID recorded)

@@ -11,9 +11,6 @@ class ListPageViews extends ListRecords
 
     protected function getHeaderWidgets(): array
     {
-        return [
-            \Kholil\FilamentAnalitik\Widgets\AnalitikStatsOverview::class,
-            \Kholil\FilamentAnalitik\Widgets\PageViewsChart::class,
-        ];
+        return [];
     }
 }

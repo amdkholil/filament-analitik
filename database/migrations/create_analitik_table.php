@@ -8,9 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(config('filament-analitik.table_name', 'filament_page_views'), function (Blueprint $blueprint) {
+        Schema::create(config('filament-analitik.table_name', 'analitik'), function (Blueprint $blueprint) {
             $blueprint->id();
-            $blueprint->string('url')->index();
+            $blueprint->text('url');
             $blueprint->string('path')->index();
             $blueprint->string('method');
             $blueprint->string('ip')->nullable();
@@ -25,6 +25,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(config('filament-analitik.table_name', 'filament_page_views'));
+        Schema::dropIfExists(config('filament-analitik.table_name', 'analitik'));
     }
 };

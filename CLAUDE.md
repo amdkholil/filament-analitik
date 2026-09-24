@@ -15,14 +15,14 @@ Simple page analytics for Filament v4/v5 (compatible with Laravel 12+).
 ## Technical Context
 - **Documentation**: See [doc/SRS.md](doc/SRS.md) for full requirements and architecture.
 - **Tracking Logic**: Uses `TrackPageView` middleware to dispatch `TrackPageViewJob`.
-- **Database**: Stores data in `filament_page_views` table.
+- **Database**: Stores data in `analitik` table.
 - **Migrations**: Must be published manually via `vendor:publish --tag="filament-analitik-migrations"` — no automatic loading from vendor.
 - **Location**: Uses `stevebauman/location` for geo-IP lookup.
 
 ## Coding Standards
 - **PHP**: PHP 8.2+, strictly typed. PSR-12 standard.
 - **Filament**: Use Filament v5 patterns for Widgets, Resources, and Plugins.
-- **Testing**: Pest PHP for all tests (Feature & Unit).
+- **Testing**: Pest PHP for feature tests.
 - **Architecture**: Keep tracking logic asynchronous (Jobs). Use service providers for package bootstrapping.
 
 ## Skills 🪨

@@ -14,27 +14,59 @@ class TrackPageView
     {
         $response = $next($request);
 
-        if (!config('filament-analitik.enabled', true)) {
+        if (! config('filament-analitik.enabled', true)) {
             return $response;
         }
 
-        // Exclude Filament panel pages
-        if (Filament::getCurrentPanel()) {
+        // Exclude Filament panel pages (route-based is Octane-safe; current panel as fallback)
+        if ($request->routeIs('filament.*') || Filament::getCurrentPanel()) {
             return $response;
         }
 
         // Only track successful GET requests
-        if ($request->isMethod('GET') && $response->getStatusCode() === 200) {
-            TrackPageViewJob::dispatch([
-                'url' => $request->fullUrl(),
-                'path' => $request->path(),
-                'method' => $request->method(),
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'project_id' => config('filament-analitik.project_id'),
-            ]);
+        if (! $request->isMethod('GET') || $response->getStatusCode() !== 200) {
+            return $response;
         }
 
+        if ($this->isBot($request)) {
+            return $response;
+        }
+
+        $path = $request->path();
+        $path = '/' . ltrim($path === '' ? '/' : $path, '/');
+
+        TrackPageViewJob::dispatch([
+            'url' => $request->fullUrl(),
+            'path' => $path,
+            'method' => $request->method(),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'project_id' => config('filament-analitik.project_id'),
+        ]);
+
         return $response;
+    }
+
+    protected function isBot(Request $request): bool
+    {
+        if (! config('filament-analitik.exclude_bots', true)) {
+            return false;
+        }
+
+        $userAgent = (string) $request->userAgent();
+
+        if ($userAgent === '') {
+            return true;
+        }
+
+        $patterns = config('filament-analitik.bot_patterns', []);
+
+        foreach ($patterns as $pattern) {
+            if ($pattern !== '' && stripos($userAgent, $pattern) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

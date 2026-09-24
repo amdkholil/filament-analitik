@@ -24,13 +24,20 @@ beforeEach(function () {
 });
 
 it('computes stats for analitik stats overview widget', function () {
-    $viewsToday = PageView::whereDate('created_at', today())->count();
-    $uniqueVisitors = PageView::distinct('ip')->count('ip');
-    $totalViews = PageView::count();
+    $widget = app(\Kholil\FilamentAnalitik\Widgets\AnalitikStatsOverview::class);
 
-    expect($viewsToday)->toBe(2);
-    expect($uniqueVisitors)->toBe(1);
-    expect($totalViews)->toBe(2);
+    $method = new \ReflectionMethod($widget, 'getStats');
+    $method->setAccessible(true);
+    $stats = $method->invoke($widget);
+
+    $values = array_map(fn ($stat) => $stat->getValue(), $stats);
+
+    expect($values)->toBe([2, 1, 2]);
+
+    foreach ($stats as $stat) {
+        $chart = $stat->getChart();
+        expect($chart)->toBeArray()->toHaveCount(7);
+    }
 });
 
 it('computes chart data for page views chart widget', function () {

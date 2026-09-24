@@ -17,7 +17,7 @@ it('dispatches tracking job on page view', function () {
         ->assertOk();
 
     Bus::assertDispatched(TrackPageViewJob::class, function ($job) {
-        return $job->data['path'] === 'test-page';
+        return $job->data['path'] === '/test-page';
     });
 });
 

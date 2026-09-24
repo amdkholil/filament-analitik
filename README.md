@@ -7,11 +7,14 @@ Simple and lightweight page analytics plugin for Filament v4/v5. Track your webs
 
 **A simple, free, and privacy-friendly alternative to Google Analytics.** No complex setup, no external scripts, and no tracking cookies required. Just install and start tracking your website traffic instantly.
 
+![Analitik Dashboard](https://raw.githubusercontent.com/amdkholil/filament-analitik/main/capture/1.png)
+![Analitik Logs](https://raw.githubusercontent.com/amdkholil/filament-analitik/main/capture/2.png)
+
 ## Features
 
-- 🚀 **Asynchronous Tracking**: Uses Laravel Jobs to ensure zero performance impact on your application.
+- 🚀 **Asynchronous Tracking**: Uses Laravel Jobs to ensure zero performance impact on your application when using a queue worker (e.g. redis/database; `sync` queue connection runs inline).
 - 📍 **Location Tracking**: Automatically detects city, state, and country using [stevebauman/location](https://github.com/stevebauman/location).
-- 📊 **Dashboard Widgets**: Includes stats overview and page views chart widgets.
+- 📊 **Dashboard Widgets**: Includes stats overview, page views chart, top pages table, top countries table, and visitors country chart widgets.
 - 📋 **Resource View**: Manage and view detailed analytics logs in your Filament panel.
 - 🛡️ **Privacy Focused**: Excludes Filament panel pages from tracking by default.
 
@@ -80,9 +83,11 @@ The middleware will:
 The configuration file (`config/filament-analitik.php`) allows you to customize the following settings:
 
 - **enabled**: Enable or disable page view tracking.
-- **table_name**: Change the database table name used to store page views (default: `'filament_page_views'`).
+- **table_name**: Change the database table name used to store page views (default: `'analitik'`). Publish the config before running migrations if you change this value.
 - **project_id**: A unique identifier for this project. Useful for multi-tenant, SaaS, or centralized analytics setups where you collect analytics from multiple applications or websites into a single database.
   - You can configure this easily in your `.env` file: `FILAMENT_ANALITIK_PROJECT_ID="your-project-id"`
+- **exclude_bots**: Enable or disable automatic bot and crawler filtering (default: `true`).
+- **bot_patterns**: List of user-agent string patterns to exclude from analytics tracking.
 - **navigation**: Customize the sidebar navigation settings:
   - **label**: The text label displayed in the Filament sidebar (default: `'Analitik'`).
   - **group**: The navigation group in the sidebar (default: `null` / no group).
@@ -124,8 +129,16 @@ Define an array of roles that are allowed to access:
 For custom or complex programmatic authorization logic, pass a Closure dynamically to the plugin registration in your Panel Provider:
 
 ```php
-FilamentAnalitikPlugin::make()
-    ->canAccessUsing(fn () => auth()->user()->email === 'kholil@example.com')
+use Kholil\FilamentAnalitik\FilamentAnalitikPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            FilamentAnalitikPlugin::make()
+                ->canAccessUsing(fn () => auth()->user()?->email === 'admin@example.com'),
+        ]);
+}
 ```
 
 ## Documentation

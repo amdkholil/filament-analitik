@@ -3,6 +3,7 @@
 namespace Kholil\FilamentAnalitik\Widgets;
 
 use Filament\Widgets\ChartWidget;
+use Illuminate\Database\Eloquent\Builder;
 use Kholil\FilamentAnalitik\Models\PageView;
 
 class VisitorsCountryChart extends ChartWidget
@@ -24,16 +25,22 @@ class VisitorsCountryChart extends ChartWidget
 
     protected function getData(): array
     {
-        $activeFilter = $this->filter;
+        $activeFilter = $this->resolveFilter();
 
-        $query = PageView::select('country')
+        $query = PageView::query()
+            ->select('country')
             ->selectRaw('count(*) as count')
             ->whereNotNull('country')
-            ->when($activeFilter === '1', fn($q) => $q->where('created_at', '>=', now()->subDay()))
-            ->when($activeFilter !== '1', fn($q) => $q->where('created_at', '>=', now()->subDays((int)$activeFilter)))
+            ->when($activeFilter === '1', fn ($q) => $q->where('created_at', '>=', now()->subDay()))
+            ->when($activeFilter !== '1', fn ($q) => $q->where('created_at', '>=', now()->subDays((int) $activeFilter)))
             ->groupBy('country')
             ->orderBy('count', 'desc')
             ->limit(5);
+
+        $projectId = config('filament-analitik.project_id');
+        if (filled($projectId)) {
+            $query->where('project_id', $projectId);
+        }
 
         $data = $query->get();
 
@@ -41,7 +48,7 @@ class VisitorsCountryChart extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Visitors',
-                    'data' => $data->pluck('count')->toArray(),
+                    'data' => $data->pluck('count')->map(fn ($count) => (int) $count)->toArray(),
                     'backgroundColor' => [
                         '#3b82f6',
                         '#10b981',
@@ -53,6 +60,14 @@ class VisitorsCountryChart extends ChartWidget
             ],
             'labels' => $data->pluck('country')->toArray(),
         ];
+    }
+
+    protected function resolveFilter(): string
+    {
+        $filters = $this->getFilters() ?? [];
+        $key = (string) $this->filter;
+
+        return array_key_exists($key, $filters) ? $key : '7';
     }
 
     protected function getType(): string

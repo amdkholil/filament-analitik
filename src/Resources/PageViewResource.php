@@ -4,18 +4,29 @@ namespace Kholil\FilamentAnalitik\Resources;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Kholil\FilamentAnalitik\FilamentAnalitikPlugin;
 use Kholil\FilamentAnalitik\Models\PageView;
 use Kholil\FilamentAnalitik\Resources\PageViewResource\Pages;
-use Kholil\FilamentAnalitik\FilamentAnalitikPlugin;
 
 class PageViewResource extends Resource
 {
     protected static ?string $model = PageView::class;
+
+    protected static ?string $breadcrumb = 'Analitik Logs';
+
+    public static function getModelLabel(): string
+    {
+        return 'Analitik Log';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Analitik Logs';
+    }
 
     public static function getNavigationLabel(): string
     {
@@ -85,9 +96,7 @@ class PageViewResource extends Resource
                         ->toArray())
                     ->label('Project'),
             ])
-            ->actions([
-                ViewAction::make(),
-            ])
+            ->actions([])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

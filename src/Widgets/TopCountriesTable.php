@@ -2,12 +2,12 @@
 
 namespace Kholil\FilamentAnalitik\Widgets;
 
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Columns\TextColumn;
-use Kholil\FilamentAnalitik\Models\PageView;
 use Illuminate\Support\Facades\DB;
+use Kholil\FilamentAnalitik\Models\PageView;
 
 class TopCountriesTable extends TableWidget
 {
@@ -15,15 +15,31 @@ class TopCountriesTable extends TableWidget
 
     protected static ?string $heading = 'Top Countries by Visits';
 
+    public function getTableQuery(): Builder
+    {
+        $tableName = (new PageView)->getTable();
+
+        $query = PageView::query()
+            ->fromSub(function ($q) use ($tableName) {
+                $q->from($tableName)
+                    ->select('country', DB::raw('MAX(id) as id'), DB::raw('count(*) as total_visits'))
+                    ->whereNotNull('country');
+
+                $projectId = config('filament-analitik.project_id');
+                if (filled($projectId)) {
+                    $q->where('project_id', $projectId);
+                }
+
+                $q->groupBy('country');
+            }, $tableName);
+
+        return $query;
+    }
+
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn (): Builder => PageView::query()
-                ->select('country', DB::raw('MAX(id) as id'), DB::raw('count(*) as total_visits'))
-                ->whereNotNull('country')
-                ->groupBy('country')
-                ->orderByDesc('total_visits')
-            )
+            ->query($this->getTableQuery())
             ->columns([
                 TextColumn::make('country')
                     ->label('Country')
@@ -31,6 +47,7 @@ class TopCountriesTable extends TableWidget
                 TextColumn::make('total_visits')
                     ->label('Total Visits')
                     ->sortable(),
-            ]);
+            ])
+            ->defaultSort('total_visits', 'desc');
     }
 }
