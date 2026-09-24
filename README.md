@@ -7,8 +7,8 @@ Simple and lightweight page analytics plugin for Filament v4/v5. Track your webs
 
 **A simple, free, and privacy-friendly alternative to Google Analytics.** No complex setup, no external scripts, and no tracking cookies required. Just install and start tracking your website traffic instantly.
 
-![Analitik Dashboard](https://raw.githubusercontent.com/amdkholil/filament-analitik/main/capture/1.png)
-![Analitik Logs](https://raw.githubusercontent.com/amdkholil/filament-analitik/main/capture/2.png)
+![Analitik Dashboard](https://raw.githubusercontent.com/amdkholil/filament-analitik/main/capture/2.png)
+![Analitik Logs](https://raw.githubusercontent.com/amdkholil/filament-analitik/main/capture/1.png)
 
 ## Features
 
@@ -140,11 +140,6 @@ public function panel(Panel $panel): Panel
         ]);
 }
 ```
-
-## Documentation
-
-Detailed technical documentation and requirements can be found in the [doc](doc) folder:
-- [Software Requirements Specification (SRS)](doc/SRS.md)
 
 ## Requirements
 
